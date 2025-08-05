@@ -1,15 +1,22 @@
 import { BaseTrack } from '../types';
+import { useMusicPlayer } from '../contexts/MusicPlayerContext';
 
 interface TrackCardProps {
   track: BaseTrack;
 }
 
 const TrackCard = ({ track }: TrackCardProps) => {
+  const { playTrack } = useMusicPlayer();
+
   const formatDuration = (seconds?: number) => {
     if (!seconds) return '';
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
     return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+  };
+
+  const handlePlay = () => {
+    playTrack(track);
   };
 
   return (
@@ -22,17 +29,20 @@ const TrackCard = ({ track }: TrackCardProps) => {
             alt={track.title}
             className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
           />
-          
+         
           {/* Play Button Overlay */}
           <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-            <button className="bg-white/20 backdrop-blur-sm border border-white/30 text-white p-3 rounded-full hover:bg-white/30 transition-all duration-300">
+            <button 
+              onClick={handlePlay}
+              className="bg-white/20 backdrop-blur-sm border border-white/30 text-white p-3 rounded-full hover:bg-white/30 transition-all duration-300"
+            >
               <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M8 5v14l11-7z"/>
               </svg>
             </button>
           </div>
         </div>
-
+        
         {/* Track Info */}
         <div className="text-black/80 dark:text-white">
           <h3 className="font-semibold text-lg mb-1 truncate">

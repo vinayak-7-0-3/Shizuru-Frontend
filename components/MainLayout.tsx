@@ -1,11 +1,15 @@
 import { ReactNode, useEffect, useState } from 'react';
 import Navbar from './Navbar';
+import MiniPlayer from './MiniPlayer';
+import FullPlayer from './FullPlayer';
+import { useMusicPlayer } from '../contexts/MusicPlayerContext';
 
 interface MainLayoutProps {
   children: ReactNode;
 }
 
 const MainLayout = ({ children }: MainLayoutProps) => {
+  const { isFullScreen } = useMusicPlayer();
   const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {
@@ -30,9 +34,11 @@ const MainLayout = ({ children }: MainLayoutProps) => {
   return (
     <>
       <Navbar toggleDark={() => setDarkMode(prev => !prev)} darkMode={darkMode} />
-      <main className="bg-white dark:bg-neutral-900 text-black dark:text-white transition-colors duration-300">
+      <main className="bg-white dark:bg-neutral-900 text-black dark:text-white transition-colors duration-300 pb-20">
         {children}
       </main>
+      <MiniPlayer />
+      {isFullScreen && <FullPlayer />}
     </>
   );
 };
