@@ -55,3 +55,12 @@ export interface ApiResponse<T> {
   error?: string;
   status: number;
 }
+
+export interface AlbumDetailed extends BaseAlbum {
+  tracks: BaseTrack[];
+}
+
+export interface ArtistDetailed extends BaseArtist {
+  albums: BaseAlbum[];
+  tracks: BaseTrack[];
+}
