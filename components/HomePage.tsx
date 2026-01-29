@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import { BaseTrack, BaseArtist, BaseAlbum, ApiResponse } from '../types';
 import TrackCard from '../components/TrackCard';
 import ArtistCard from '../components/ArtistCard';
@@ -8,6 +9,7 @@ import ChangingHeroSection from '../components/ChangingHeroSection';
 import SectionHeader from '../components/SectionHeader';
 
 const HomePage = () => {
+  const router = useRouter();
   const [featuredTracks, setFeaturedTracks] = useState<BaseTrack[]>([]);
   const [topArtists, setTopArtists] = useState<BaseArtist[]>([]);
   const [recentAlbums, setRecentAlbums] = useState<BaseAlbum[]>([]);
@@ -22,6 +24,10 @@ const HomePage = () => {
           fetch('/api/albums?page=1&limit=6')
         ]);
 
+        if (!tracksRes.ok || !artistsRes.ok || !albumsRes.ok) {
+          throw new Error('Failed to fetch data');
+        }
+
         const [tracksData, artistsData, albumsData]: [
           BaseTrack[],
           BaseArtist[],
@@ -35,10 +41,11 @@ const HomePage = () => {
         setFeaturedTracks(tracksData);
         setTopArtists(artistsData);
         setRecentAlbums(albumsData);
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching data:', error);
-      } finally {
-        setLoading(false);
+        router.push('/500');
+        // Don't set loading to false; keep spinner until redirect happens
       }
     };
 

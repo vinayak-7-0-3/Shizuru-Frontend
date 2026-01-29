@@ -9,18 +9,28 @@ export default function LoginPage() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    const res = await fetch('/api/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(form)
-    });
+    try {
+      const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form)
+      });
 
-    const data = await res.json();
-    if (res.ok) {
-      // Token is now in cookie, no need to store in localStorage
+      if (!res.ok) {
+        if (res.status === 500) {
+          router.push('/500');
+          return;
+        }
+        const data = await res.json();
+        setError(data.detail || 'Login failed');
+        return;
+      }
+
       router.push('/');
-    } else {
-      setError(data.detail || 'Login failed');
+    } catch (err) {
+      console.error('Login error:', err);
+      setError('Failed to connect to server');
+      // optional: router.push('/500'); if we want to be very aggressive
     }
   };
 
