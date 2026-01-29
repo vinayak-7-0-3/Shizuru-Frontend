@@ -24,15 +24,15 @@ const FullPlayer = () => {
   // Handle mouse movement for auto-hide controls
   const handleMouseMove = useCallback(() => {
     setShowControls(true);
-    
+
     if (mouseTimer) {
       clearTimeout(mouseTimer);
     }
-    
+
     const timer = setTimeout(() => {
       setShowControls(false);
     }, 3000); // Hide after 3 seconds of no movement
-    
+
     setMouseTimer(timer);
   }, [mouseTimer]);
 
@@ -48,7 +48,7 @@ const FullPlayer = () => {
   useEffect(() => {
     document.body.style.overflow = 'hidden';
     document.body.style.cursor = showControls ? 'default' : 'none';
-    
+
     return () => {
       document.body.style.overflow = 'unset';
       document.body.style.cursor = 'default';
@@ -84,14 +84,14 @@ const FullPlayer = () => {
   const progress = duration ? (currentTime / duration) * 100 : 0;
 
   return (
-    <div 
+    <div
       className="fixed inset-0 z-50 flex flex-col overflow-hidden"
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
       {/* Enhanced Blurred Background */}
       <div className="absolute inset-0">
-        <div 
+        <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat transform scale-110"
           style={{
             backgroundImage: `url(${currentTrack.cover_url || '/default-cover.jpg'})`,
@@ -110,7 +110,7 @@ const FullPlayer = () => {
           aria-label="Close full screen player"
         >
           <svg className="w-5 h-5 md:w-6 md:h-6" fill="white" viewBox="0 0 24 24">
-            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
           </svg>
         </button>
         <h1 className="text-base md:text-lg font-medium drop-shadow-lg text-white/90">Now Playing</h1>
@@ -154,7 +154,7 @@ const FullPlayer = () => {
         </div>
 
         {/* Bottom Controls - Fixed at bottom with proper spacing */}
-        <div className={`flex-shrink-0 transition-all duration-500 ${showControls ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+        <div className={`flex-shrink-0 transition-all duration-500 pb-12 md:pb-24 ${showControls ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
           {/* Progress Bar - Slimmer and elegant */}
           <div className="px-6 md:px-12 lg:px-16 mb-4 md:mb-6">
             <input
