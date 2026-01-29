@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Link from 'next/link';
 
 const Navbar = (
   {
@@ -13,28 +14,28 @@ const Navbar = (
 
   return (
     <nav className="sticky top-0 z-50 backdrop-blur-xl bg-white/10 dark:bg-black/30 border-b border-white/20 dark:border-white/10">
-      <div className="max-w-7xl mx-auto px-6 py-4">
+      <div className="w-full px-6 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <div className="flex items-center space-x-2">
+          <Link href="/" className="flex items-center space-x-2">
             <div className="w-8 h-8 bg-gradient-to-br from-pink-500 to-purple-600 rounded-lg flex items-center justify-center">
               <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" />
               </svg>
             </div>
             <span className="text-xl font-bold text-black dark:text-white">Shizuru Music</span>
-          </div>
+          </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            <a href="#" className="text-black dark:text-white hover:text-black/30 dark:hover:text-white/40 transition-colors">Home</a>
-            <a href="#" className="text-black dark:text-white hover:text-black/30 dark:hover:text-white/40 transition-colors">Browse</a>
-            <a href="#" className="text-black dark:text-white hover:text-black/30 dark:hover:text-white/40 transition-colors">Library</a>
-            <a href="#" className="text-black dark:text-white hover:text-black/30 dark:hover:text-white/40 transition-colors">Playlists</a>
+          <div className="hidden lg:flex items-center space-x-8">
+            <Link href="/" className="text-black dark:text-white hover:text-black/30 dark:hover:text-white/40 transition-colors">Home</Link>
+            <Link href="/browse" className="text-black dark:text-white hover:text-black/30 dark:hover:text-white/40 transition-colors">Browse</Link>
+            <Link href="/library" className="text-black dark:text-white hover:text-black/30 dark:hover:text-white/40 transition-colors">Library</Link>
+            <Link href="/library/playlists" className="text-black dark:text-white hover:text-black/30 dark:hover:text-white/40 transition-colors">Playlists</Link>
           </div>
 
           {/* Search Bar */}
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="hidden lg:flex items-center space-x-4">
             <div className="relative">
               <input
                 type="text"
@@ -82,7 +83,7 @@ const Navbar = (
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden p-2 text-black dark:text-white"
+            className="lg:hidden p-2 text-black dark:text-white"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -93,12 +94,12 @@ const Navbar = (
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden mt-4 pb-4 border-t border-white/20 pt-4">
+          <div className="lg:hidden mt-4 pb-4 border-t border-white/20 pt-4">
             <div className="flex flex-col space-y-4">
-              <a href="#" className="text-black dark:text-white hover:text-white/80 transition-colors">Home</a>
-              <a href="#" className="text-black dark:text-white/70 hover:text-white transition-colors">Browse</a>
-              <a href="#" className="text-black dark:text-white/70 hover:text-white transition-colors">Library</a>
-              <a href="#" className="text-black dark:text-white/70 hover:text-white transition-colors">Playlists</a>
+              <Link href="/" className="text-black dark:text-white hover:text-white/80 transition-colors">Home</Link>
+              <Link href="/browse" className="text-black dark:text-white/70 hover:text-white transition-colors">Browse</Link>
+              <Link href="/library" className="text-black dark:text-white/70 hover:text-white transition-colors">Library</Link>
+              <Link href="/library/playlists" className="text-black dark:text-white/70 hover:text-white transition-colors">Playlists</Link>
 
               <button
                 onClick={toggleDark}
