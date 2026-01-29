@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 export interface User {
   username: string;
   email: string;
+  role: string;
 }
 
 export const useAuth = () => {
@@ -28,19 +29,19 @@ export const useAuth = () => {
   };
 
   const login = async (username: string, password: string) => {
-    const response = await fetch('/login', {
+    const response = await fetch('/api/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password }),
     });
-    
+
     if (response.ok) {
       await checkAuth();
-      
+
       const urlParams = new URLSearchParams(window.location.search);
       const redirectTo = urlParams.get('redirect') || '/';
       router.push(redirectTo);
-      
+
       return true;
     }
     return false;

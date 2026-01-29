@@ -17,7 +17,7 @@ export default function LoginPage() {
 
     const data = await res.json();
     if (res.ok) {
-      localStorage.setItem('token', data.access_token);
+      // Token is now in cookie, no need to store in localStorage
       router.push('/');
     } else {
       setError(data.detail || 'Login failed');
