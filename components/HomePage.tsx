@@ -67,13 +67,13 @@ const HomePage = () => {
 
 
       {/* Main Content */}
-      <div className="px-6 pb-20 bg-white dark:bg-black">
+      <div className="px-6 pb-20 bg-white dark:bg-black max-w-7xl mx-auto">
         {/* Featured Tracks */}
         <section className="mb-12">
           <SectionHeader title="Featured Tracks" />
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="flex flex-col space-y-2">
             {featuredTracks.slice(1, 7).map((track, index) => (
-              <TrackCard key={track.track_id || index} track={track} />
+              <TrackCard key={track.track_id || index} track={track} layout="list" />
             ))}
           </div>
         </section>

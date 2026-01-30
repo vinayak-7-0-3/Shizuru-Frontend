@@ -12,7 +12,7 @@ const AlbumCard = ({ album }: AlbumCardProps) => {
       <div className="group cursor-pointer">
         <div className="bg-black/10 dark:bg-white/10 rounded-2xl p-4 border border-white/20 hover:bg-white/20 transition-all duration-300 hover:scale-105">
           {/* Album Art */}
-          <div className="relative mb-4 overflow-hidden rounded-xl">
+          <div className="relative mb-4 overflow-hidden rounded-xl aspect-square w-full">
             <Image
               src={album.cover_url || '/default-album.jpg'}
               alt={album.title}
