@@ -95,7 +95,7 @@ const SearchPage = () => {
                             </p>
                         </div>
 
-                        <div className="flex gap-2 overflow-x-auto p-1 scrollbar-hide">
+                        <div className="flex flex-wrap gap-x-2 gap-y-3 p-1">
                             {tabs.map((tab) => {
                                 const Icon = tab.icon;
                                 const isActive = activeTab === tab.id;
