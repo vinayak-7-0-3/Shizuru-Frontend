@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from 'next/image';
 import { BaseTrack } from "@/types";
+import { useMusicPlayer } from "../contexts/MusicPlayerContext";
+import { Play } from "lucide-react";
 
 interface HeroSectionProps {
   featuredTrack?: BaseTrack;
@@ -13,7 +15,13 @@ interface ChangingHeroSectionProps {
 }
 
 const HeroSection = ({ featuredTrack }: HeroSectionProps) => {
+  const { playTrack } = useMusicPlayer();
+
   if (!featuredTrack) return null;
+
+  const handlePlay = () => {
+    playTrack(featuredTrack);
+  };
 
   return (
     <div className="relative h-[32rem] sm:h-[28rem] mb-6 sm:mb-8 overflow-hidden pt-20">
@@ -63,8 +71,12 @@ const HeroSection = ({ featuredTrack }: HeroSectionProps) => {
               )}
 
               {/* Play Button */}
-              <button className="w-full sm:w-auto bg-white/20 backdrop-blur-sm border border-white/30 text-white px-6 py-2 sm:px-8 sm:py-3 rounded-full font-semibold hover:bg-white/30 transition-all duration-300 hover:scale-105">
-                ▶ Play Now
+              <button
+                onClick={handlePlay}
+                className="w-full sm:w-auto bg-white/20 backdrop-blur-sm border border-white/30 text-white px-6 py-2 sm:px-8 sm:py-3 rounded-full font-semibold hover:bg-white/30 transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2"
+              >
+                <Play className="w-5 h-5 fill-current" />
+                Play Now
               </button>
             </div>
           </div>
