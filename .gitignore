@@ -46,5 +46,5 @@ backendapi.json
 
 # PWA
 public/sw.js
-*workbox-*.js
-*worker-*.js
+public/workbox-*.js
+public/worker-*.js
