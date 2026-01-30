@@ -5,6 +5,7 @@ export interface BaseTrack {
     msg_id?: number;
     file_unique_id?: string;
     file_size?: number;
+    file_name?: string;
     title: string;
     track_id?: string;
     artist: string;

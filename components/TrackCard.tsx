@@ -59,7 +59,7 @@ const TrackCard = ({ track, layout = 'card' }: TrackCardProps) => {
           </div>
 
           <a
-            href={`/api/stream/${track.track_id}?download=true&filename=${encodeURIComponent((track.title || 'track') + '.mp3')}`}
+            href={`/api/stream/${track.file_unique_id}?download=true&filename=${encodeURIComponent(track.file_name || (track.title || 'track') + '.mp3')}`}
             onClick={(e) => e.stopPropagation()}
             className="p-2 text-gray-500 hover:text-black dark:text-gray-400 dark:hover:text-white transition-colors"
             title="Download"
@@ -113,7 +113,7 @@ const TrackCard = ({ track, layout = 'card' }: TrackCardProps) => {
               {track.duration && (
                 <div className="flex items-center gap-3">
                   <a
-                    href={`/api/stream/${track.track_id}?download=true&filename=${encodeURIComponent((track.title || 'track') + '.mp3')}`}
+                    href={`/api/stream/${track.file_unique_id}?download=true&filename=${encodeURIComponent(track.file_name || (track.title || 'track') + '.mp3')}`}
                     onClick={(e) => e.stopPropagation()}
                     className="text-black/60 hover:text-black dark:text-white/60 dark:hover:text-white transition-colors"
                     title="Download"

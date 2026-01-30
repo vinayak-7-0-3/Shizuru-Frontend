@@ -70,7 +70,7 @@ export const MusicPlayerProvider = ({ children }: MusicPlayerProviderProps) => {
 
     if (currentTrack?.track_id !== track.track_id) {
       setCurrentTrack(track);
-      audioRef.current.src = `/api/stream/${track.track_id}`;
+      audioRef.current.src = `/api/stream/${track.file_unique_id}`;
     }
 
     audioRef.current.play();
