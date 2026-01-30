@@ -1,5 +1,6 @@
 import { BaseTrack } from '../types';
 import { useMusicPlayer } from '../contexts/MusicPlayerContext';
+import { Download } from 'lucide-react';
 
 interface TrackCardProps {
   track: BaseTrack;
@@ -57,6 +58,16 @@ const TrackCard = ({ track, layout = 'card' }: TrackCardProps) => {
             {track.album || ''}
           </div>
 
+          <a
+            href={`/api/stream/${track.track_id}?download=true&filename=${encodeURIComponent((track.title || 'track') + '.mp3')}`}
+            onClick={(e) => e.stopPropagation()}
+            className="p-2 text-gray-500 hover:text-black dark:text-gray-400 dark:hover:text-white transition-colors"
+            title="Download"
+            download
+          >
+            <Download size={16} />
+          </a>
+
           <div className="text-sm text-gray-500 dark:text-gray-400 w-12 text-right">
             {track.duration && formatDuration(Math.trunc(track.duration / 1000))}
           </div>
@@ -100,9 +111,20 @@ const TrackCard = ({ track, layout = 'card' }: TrackCardProps) => {
                 </p>
               )}
               {track.duration && (
-                <span className="text-black/80 dark:text-white/60 text-xs">
-                  {formatDuration(Math.trunc(track.duration / 1000))}
-                </span>
+                <div className="flex items-center gap-3">
+                  <a
+                    href={`/api/stream/${track.track_id}?download=true&filename=${encodeURIComponent((track.title || 'track') + '.mp3')}`}
+                    onClick={(e) => e.stopPropagation()}
+                    className="text-black/60 hover:text-black dark:text-white/60 dark:hover:text-white transition-colors"
+                    title="Download"
+                    download
+                  >
+                    <Download size={14} />
+                  </a>
+                  <span className="text-black/80 dark:text-white/60 text-xs">
+                    {formatDuration(Math.trunc(track.duration / 1000))}
+                  </span>
+                </div>
               )}
             </div>
           </div>

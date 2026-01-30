@@ -16,6 +16,8 @@ export default async function handler(req: NextRequest) {
   const url = new URL(req.url);
   const pathSegments = url.pathname.split('/');
   const id = pathSegments[pathSegments.length - 1];
+  const download = url.searchParams.get('download') === 'true';
+  const filename = url.searchParams.get('filename');
 
   if (!id) {
     return new Response(JSON.stringify({ error: 'Track ID is required' }), {
@@ -27,7 +29,7 @@ export default async function handler(req: NextRequest) {
   try {
     // Get range header from client request
     const range = req.headers.get('range');
-    
+
     // Prepare headers for backend request
     const backendHeaders: Record<string, string> = {
       'User-Agent': 'NextJS-Streaming-Proxy/1.0',
@@ -47,9 +49,9 @@ export default async function handler(req: NextRequest) {
 
     if (!response.ok) {
       console.error(`Backend error: ${response.status} ${response.statusText}`);
-      return new Response(JSON.stringify({ 
+      return new Response(JSON.stringify({
         error: 'Failed to fetch audio stream',
-        status: response.status 
+        status: response.status
       }), {
         status: response.status === 404 ? 404 : 500,
         headers: { 'Content-Type': 'application/json' },
@@ -82,6 +84,12 @@ export default async function handler(req: NextRequest) {
     responseHeaders.set('Access-Control-Allow-Methods', 'GET');
     responseHeaders.set('Access-Control-Allow-Headers', 'Range');
 
+    // Handle Download
+    if (download) {
+      const safeFilename = filename ? `"${filename.replace(/"/g, '')}"` : 'track.mp3';
+      responseHeaders.set('Content-Disposition', `attachment; filename=${safeFilename}`);
+    }
+
     // Return streaming response with appropriate status
     const status = response.status; // Will be 206 for partial content, 200 for full content
 
@@ -92,8 +100,8 @@ export default async function handler(req: NextRequest) {
 
   } catch (error) {
     console.error('Streaming error:', error);
-    return new Response(JSON.stringify({ 
-      error: 'Internal server error while streaming' 
+    return new Response(JSON.stringify({
+      error: 'Internal server error while streaming'
     }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
