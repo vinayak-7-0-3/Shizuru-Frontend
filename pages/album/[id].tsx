@@ -63,24 +63,24 @@ const AlbumDetailPage = () => {
         <MainLayout immersive>
             <div className="min-h-screen bg-white dark:bg-neutral-900 text-black dark:text-white pb-24">
                 {/* Hero Section */}
-                <div className="relative h-96 w-full overflow-hidden">
+                <div className="relative min-h-96 h-auto w-full overflow-hidden flex flex-col">
                     <div
                         className="absolute inset-0 bg-cover bg-center blur-2xl opacity-50 dark:opacity-30"
                         style={{ backgroundImage: `url(${album.cover_url || '/default-album.jpg'})` }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-white dark:from-neutral-900 to-transparent" />
 
-                    <div className="relative h-full max-w-7xl mx-auto px-6 flex items-end pb-8">
-                        <div className="flex flex-col md:flex-row items-end md:items-end gap-8 w-full">
+                    <div className="relative flex-1 max-w-7xl mx-auto px-6 flex items-start md:items-end pt-28 md:pt-0 pb-8">
+                        <div className="flex flex-col md:flex-row items-center md:items-end gap-8 w-full">
                             <img
                                 src={album.cover_url || '/default-album.jpg'}
                                 alt={album.title}
                                 className="w-52 h-52 rounded-2xl shadow-2xl object-cover"
                             />
-                            <div className="flex-1 space-y-4">
+                            <div className="flex-1 space-y-4 text-center md:text-left">
                                 <p className="text-sm font-bold uppercase tracking-wider text-black/60 dark:text-white/60">Album</p>
                                 <h1 className="text-4xl md:text-6xl font-bold">{album.title}</h1>
-                                <div className="flex flex-wrap items-center gap-4 text-sm font-medium text-black/80 dark:text-white/80">
+                                <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 text-sm font-medium text-black/80 dark:text-white/80">
                                     <div className="flex items-center gap-2">
                                         <div className="w-8 h-8 rounded-full bg-neutral-200 dark:bg-neutral-700 flex items-center justify-center overflow-hidden">
                                             {/* Could add artist image here if we had it separately, for now just initial/icon */}

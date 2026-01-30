@@ -64,7 +64,7 @@ const ArtistDetailPage = () => {
         <MainLayout immersive>
             <div className="min-h-screen bg-white dark:bg-neutral-900 text-black dark:text-white pb-24">
                 {/* Hero Section */}
-                <div className="relative h-[28rem] w-full overflow-hidden">
+                <div className="relative min-h-[28rem] h-auto w-full overflow-hidden flex flex-col">
                     <div
                         className="absolute inset-0 bg-cover bg-center"
                         style={{ backgroundImage: `url(${artist.cover_url || '/default-artist.jpg'})` }}
@@ -73,8 +73,8 @@ const ArtistDetailPage = () => {
                     </div>
                     <div className="absolute inset-0 bg-gradient-to-t from-white dark:from-neutral-900 to-transparent" />
 
-                    <div className="relative h-full max-w-7xl mx-auto px-6 flex items-end pb-12">
-                        <div className="flex items-center gap-8">
+                    <div className="relative flex-1 max-w-7xl mx-auto px-6 flex items-start md:items-end pt-28 md:pt-0 pb-12">
+                        <div className="flex flex-col md:flex-row items-center md:items-end gap-8">
                             <div className="w-40 h-40 rounded-full overflow-hidden border-4 border-white dark:border-neutral-800 shadow-2xl">
                                 <img
                                     src={artist.cover_url || '/default-artist.jpg'}
@@ -82,8 +82,8 @@ const ArtistDetailPage = () => {
                                     className="w-full h-full object-cover"
                                 />
                             </div>
-                            <div>
-                                <div className="flex items-center gap-2 text-white/90 mb-2">
+                            <div className="text-center md:text-left">
+                                <div className="flex items-center justify-center md:justify-start gap-2 text-white/90 mb-2">
                                     <div className="bg-purple-500 p-1 rounded-full">
                                         <Mic2 size={12} className="text-white" />
                                     </div>
