@@ -38,7 +38,7 @@ export default function Custom500() {
                         </h1>
 
                         <p className="text-lg text-neutral-600 dark:text-neutral-300 mb-8">
-                            We couldn't connect to the backend server. It might be offline or undergoing maintenance.
+                            We couldn&apos;t connect to the backend server. It might be offline or undergoing maintenance.
                         </p>
 
                         <div className="space-y-4">

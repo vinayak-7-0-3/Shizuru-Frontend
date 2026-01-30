@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
+
 import MainLayout from '../../components/MainLayout';
 import SectionHeader from '../../components/SectionHeader';
 import TrackCard from '../../components/TrackCard';
-import { BaseTrack } from '../../types';
+import { BaseTrack } from '@/types';
 
 const BrowseTracksPage = () => {
-    const router = useRouter();
+    // const router = useRouter(); // Unused
     const [tracks, setTracks] = useState<BaseTrack[]>([]);
     const [loading, setLoading] = useState(true);
     const [page, setPage] = useState(1);

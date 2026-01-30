@@ -1,5 +1,6 @@
-import { useMusicPlayer } from '../contexts/MusicPlayerContext';
+import { useMusicPlayer } from '@/contexts/MusicPlayerContext';
 import { useState } from 'react';
+import Image from 'next/image';
 
 const MiniPlayer = () => {
   const {
@@ -19,12 +20,6 @@ const MiniPlayer = () => {
   const [showVolumeSlider, setShowVolumeSlider] = useState(false);
 
   if (!currentTrack) return null;
-
-  const formatTime = (time: number) => {
-    const minutes = Math.floor(time / 60);
-    const seconds = Math.floor(time % 60);
-    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
-  };
 
   const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTime = (parseFloat(e.target.value) / 100) * duration;
@@ -60,10 +55,13 @@ const MiniPlayer = () => {
       <div className="flex items-center gap-4">
         {/* Track Info */}
         <div className="flex items-center gap-3 min-w-0 flex-1">
-          <img
-            src={currentTrack.cover_url || '/default-cover.jpg'}
+          <Image
+            src={currentTrack.cover_url || '/cover_art.png'}
             alt={currentTrack.title}
-            className="w-10 h-10 rounded-md object-cover"
+            width={40}
+            height={40}
+            className="rounded-md object-cover"
+            unoptimized
           />
           <div className="min-w-0 flex-1">
             <h4 className="font-medium text-sm truncate text-black dark:text-white">

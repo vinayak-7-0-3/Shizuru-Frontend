@@ -1,5 +1,6 @@
-import { BaseAlbum } from '../types';
+import { BaseAlbum } from '@/types';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface AlbumCardProps {
   album: BaseAlbum;
@@ -12,10 +13,12 @@ const AlbumCard = ({ album }: AlbumCardProps) => {
         <div className="bg-black/10 dark:bg-white/10 rounded-2xl p-4 border border-white/20 hover:bg-white/20 transition-all duration-300 hover:scale-105">
           {/* Album Art */}
           <div className="relative mb-4 overflow-hidden rounded-xl">
-            <img
+            <Image
               src={album.cover_url || '/default-album.jpg'}
               alt={album.title}
-              className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
+              fill
+              className="object-cover transition-transform duration-300 group-hover:scale-110"
+              unoptimized
             />
 
             {/* Play Button Overlay */}

@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { Clock, Calendar, Disc } from 'lucide-react';
 import MainLayout from '../../components/MainLayout';
 import TrackCard from '../../components/TrackCard';
-import SectionHeader from '../../components/SectionHeader';
-import { AlbumDetailed } from '../../types';
+
+import { AlbumDetailed, BaseTrack } from '@/types';
 
 const AlbumDetailPage = () => {
     const router = useRouter();
@@ -72,10 +73,13 @@ const AlbumDetailPage = () => {
 
                     <div className="relative flex-1 max-w-7xl mx-auto px-6 flex items-start md:items-end pt-28 md:pt-0 pb-8">
                         <div className="flex flex-col md:flex-row items-center md:items-end gap-8 w-full">
-                            <img
+                            <Image
                                 src={album.cover_url || '/default-album.jpg'}
                                 alt={album.title}
+                                width={208}
+                                height={208}
                                 className="w-52 h-52 rounded-2xl shadow-2xl object-cover"
+                                unoptimized
                             />
                             <div className="flex-1 space-y-4 text-center md:text-left">
                                 <p className="text-sm font-bold uppercase tracking-wider text-black/60 dark:text-white/60">Album</p>
@@ -118,7 +122,7 @@ const AlbumDetailPage = () => {
 
                         {album.tracks && album.tracks.length > 0 ? (
                             <div className="space-y-2">
-                                {album.tracks.map((track, index) => (
+                                {album.tracks.map((track: BaseTrack, index) => (
                                     <TrackCard key={track.track_id || index} track={track} layout="list" />
                                 ))}
                             </div>

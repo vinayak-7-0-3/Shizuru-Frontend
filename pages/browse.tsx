@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+
 import { Disc, Mic2, Music, ArrowRight } from 'lucide-react';
 import MainLayout from '../components/MainLayout';
 import SectionHeader from '../components/SectionHeader';
@@ -9,7 +9,7 @@ import ArtistCard from '../components/ArtistCard';
 import { BaseAlbum, BaseArtist } from '../types';
 
 const BrowsePage = () => {
-    const router = useRouter();
+    // const router = useRouter(); // Unused
     const [trendingAlbums, setTrendingAlbums] = useState<BaseAlbum[]>([]);
     const [popularArtists, setPopularArtists] = useState<BaseArtist[]>([]);
     const [loading, setLoading] = useState(true);

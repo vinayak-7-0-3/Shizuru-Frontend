@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import Image from 'next/image';
 import { BaseTrack } from "@/types";
 
 interface HeroSectionProps {
@@ -20,7 +21,7 @@ const HeroSection = ({ featuredTrack }: HeroSectionProps) => {
       <div
         className="absolute inset-0 bg-cover bg-center filter blur-sm scale-105"
         style={{
-          backgroundImage: `url(${featuredTrack.cover_url || '/default-cover.jpg'})`
+          backgroundImage: `url(${featuredTrack.cover_url || '/cover_art.png'})`
         }}
       />
 
@@ -34,10 +35,13 @@ const HeroSection = ({ featuredTrack }: HeroSectionProps) => {
 
             {/* Album Art */}
             <div className="flex-shrink-0">
-              <img
-                src={featuredTrack.cover_url || '/default-cover.jpg'}
+              <Image
+                src={featuredTrack.cover_url || '/cover_art.png'}
                 alt={featuredTrack.title}
+                width={192}
+                height={192}
                 className="w-24 h-24 sm:w-40 sm:h-40 md:w-48 md:h-48 rounded-xl sm:rounded-2xl shadow-2xl object-cover"
+                unoptimized
               />
             </div>
 

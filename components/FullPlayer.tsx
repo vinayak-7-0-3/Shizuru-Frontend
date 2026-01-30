@@ -1,6 +1,7 @@
 import { useMusicPlayer } from '../contexts/MusicPlayerContext';
 import { useEffect, useState, useCallback } from 'react';
 import { SkipBack, SkipForward, Play, Pause, Volume2, VolumeX } from "lucide-react";
+import Image from 'next/image';
 
 const FullPlayer = () => {
   const {
@@ -94,7 +95,7 @@ const FullPlayer = () => {
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat transform scale-110"
           style={{
-            backgroundImage: `url(${currentTrack.cover_url || '/default-cover.jpg'})`,
+            backgroundImage: `url(${currentTrack.cover_url || '/cover_art.png'})`,
             filter: 'blur(60px) brightness(0.4)',
           }}
         />
@@ -124,12 +125,14 @@ const FullPlayer = () => {
           {/* Album Art - Better proportions */}
           <div className="mb-6 md:mb-8">
             <div className="relative group">
-              <div className="w-64 h-64 sm:w-72 sm:h-72 md:w-80 md:h-80 lg:w-96 lg:h-96 max-w-[70vw] max-h-[35vh] aspect-square rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl ring-1 ring-white/20 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm">
-                <img
-                  src={currentTrack.cover_url || '/default-cover.jpg'}
+              <div className="relative w-64 h-64 sm:w-72 sm:h-72 md:w-80 md:h-80 lg:w-96 lg:h-96 max-w-[70vw] max-h-[35vh] aspect-square rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl ring-1 ring-white/20 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm">
+                <Image
+                  src={currentTrack.cover_url || '/cover_art.png'}
                   alt={currentTrack.title}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  fill
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
                   loading="eager"
+                  unoptimized
                 />
               </div>
               {/* Subtle reflection effect */}

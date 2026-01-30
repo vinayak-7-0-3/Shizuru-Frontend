@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import AuthForm from '../components/auth/AuthForm';
+import AuthForm, { AuthFormState } from '../components/auth/AuthForm';
 
 export default function LoginPage() {
   const router = useRouter();
-  const [form, setForm] = useState({ username: '', password: '' });
+  const [form, setForm] = useState<AuthFormState>({ username: '', password: '' });
   const [error, setError] = useState('');
 
   const handleLogin = async (e: React.FormEvent) => {

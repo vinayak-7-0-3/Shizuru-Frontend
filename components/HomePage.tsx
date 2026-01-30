@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { BaseTrack, BaseArtist, BaseAlbum, ApiResponse } from '../types';
-import TrackCard from '../components/TrackCard';
-import ArtistCard from '../components/ArtistCard';
-import AlbumCard from '../components/AlbumCard';
+import { BaseTrack, BaseArtist, BaseAlbum } from '@/types';
+import TrackCard from './TrackCard';
+import ArtistCard from './ArtistCard';
+import AlbumCard from './AlbumCard';
 
-import ChangingHeroSection from '../components/ChangingHeroSection';
-import SectionHeader from '../components/SectionHeader';
+import ChangingHeroSection from './ChangingHeroSection';
+import SectionHeader from './SectionHeader';
 
 const HomePage = () => {
   const router = useRouter();
@@ -50,7 +50,7 @@ const HomePage = () => {
     };
 
     fetchData();
-  }, []);
+  }, [router]);
 
   if (loading) {
     return (

@@ -7,7 +7,7 @@ import SectionHeader from '../../components/SectionHeader';
 import TrackCard from '../../components/TrackCard';
 import AlbumCard from '../../components/AlbumCard';
 import ArtistCard from '../../components/ArtistCard';
-import { SearchResponse, BaseTrack, BaseAlbum, BaseArtist } from '../../types';
+import { SearchResponse } from '../../types';
 
 const SearchPage = () => {
     const router = useRouter();
@@ -91,7 +91,7 @@ const SearchPage = () => {
                                 Search Results
                             </h1>
                             <p className="text-neutral-500 dark:text-neutral-400 mt-1">
-                                Found results for "{q}"
+                                Found results for &quot;{q}&quot;
                             </p>
                         </div>
 
@@ -102,7 +102,7 @@ const SearchPage = () => {
                                 return (
                                     <button
                                         key={tab.id}
-                                        onClick={() => handleTabChange(tab.id as any)}
+                                        onClick={() => handleTabChange(tab.id)}
                                         className={`
                         flex items-center gap-2 px-4 py-2 rounded-full whitespace-nowrap transition-all
                         ${isActive
@@ -202,7 +202,7 @@ const SearchPage = () => {
                             {/* No Results */}
                             {(!results.tracks?.length && !results.albums?.length && !results.artists?.length) && (
                                 <div className="text-center py-20 text-neutral-500">
-                                    <p className="text-xl font-medium">No results found for "{q}"</p>
+                                    <p className="text-xl font-medium">No results found for &quot;{q}&quot;</p>
                                     <p className="mt-2">Try searching for something else or check the spelling.</p>
                                 </div>
                             )}

@@ -1,6 +1,7 @@
-import { BaseTrack } from '../types';
+import { BaseTrack } from '@/types';
 import { useMusicPlayer } from '../contexts/MusicPlayerContext';
 import { Download } from 'lucide-react';
+import Image from 'next/image';
 
 interface TrackCardProps {
   track: BaseTrack;
@@ -31,10 +32,12 @@ const TrackCard = ({ track, layout = 'card' }: TrackCardProps) => {
         >
           {/* List Thumb */}
           <div className="relative w-12 h-12 flex-shrink-0">
-            <img
-              src={track.cover_url || '/default-cover.jpg'}
+            <Image
+              src={track.cover_url || '/cover_art.png'}
               alt={track.title}
-              className="w-full h-full rounded object-cover"
+              fill
+              className="rounded object-cover"
+              unoptimized
             />
             {/* Overlay Play Icon (List) */}
             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded">
@@ -77,10 +80,12 @@ const TrackCard = ({ track, layout = 'card' }: TrackCardProps) => {
         <div className="bg-gray-50 dark:bg-white/10 rounded-2xl p-4 border border-black/20 dark:border-white/20 hover:bg-white/20 transition-all duration-300 hover:scale-105">
           {/* Album Art */}
           <div className="relative mb-4 overflow-hidden rounded-xl">
-            <img
-              src={track.cover_url || '/default-cover.jpg'}
+            <Image
+              src={track.cover_url || '/cover_art.png'}
               alt={track.title}
-              className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
+              fill
+              className="object-cover transition-transform duration-300 group-hover:scale-110"
+              unoptimized
             />
 
             {/* Play Button Overlay */}

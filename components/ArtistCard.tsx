@@ -1,5 +1,6 @@
-import { BaseArtist } from '../types';
+import { BaseArtist } from '@/types';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface ArtistCardProps {
   artist: BaseArtist;
@@ -12,10 +13,12 @@ const ArtistCard = ({ artist }: ArtistCardProps) => {
         <div className="bg-black/10 dark:bg-white/10 rounded-2xl p-4 border border-white/20 hover:bg-white/20 transition-all duration-300 hover:scale-105">
           {/* Artist Image */}
           <div className="relative mb-3 overflow-hidden rounded-full">
-            <img
+            <Image
               src={artist.cover_url || '/default-artist.jpg'}
               alt={artist.name}
-              className="w-full h-24 object-cover transition-transform duration-300 group-hover:scale-110"
+              fill
+              className="object-cover transition-transform duration-300 group-hover:scale-110"
+              unoptimized
             />
 
             {/* Play Button Overlay */}

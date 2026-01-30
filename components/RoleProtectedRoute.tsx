@@ -1,6 +1,6 @@
 import { useAuth } from '../lib/auth';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+
 
 interface RoleProtectedRouteProps {
   children: React.ReactNode;
