@@ -1,26 +1,36 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import AuthForm from '../components/auth/AuthForm';
+import AuthForm, { AuthFormState } from '../components/auth/AuthForm';
 
 export default function LoginPage() {
   const router = useRouter();
-  const [form, setForm] = useState({ username: '', password: '' });
+  const [form, setForm] = useState<AuthFormState>({ username: '', password: '' });
   const [error, setError] = useState('');
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    const res = await fetch('/api/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(form)
-    });
+    try {
+      const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form)
+      });
 
-    const data = await res.json();
-    if (res.ok) {
-      localStorage.setItem('token', data.access_token);
+      if (!res.ok) {
+        if (res.status === 500) {
+          router.push('/500');
+          return;
+        }
+        const data = await res.json();
+        setError(data.detail || 'Login failed');
+        return;
+      }
+
       router.push('/');
-    } else {
-      setError(data.detail || 'Login failed');
+    } catch (err) {
+      console.error('Login error:', err);
+      setError('Failed to connect to server');
+      // optional: router.push('/500'); if we want to be very aggressive
     }
   };
 

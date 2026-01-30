@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 const Navbar = (
   {
@@ -10,35 +12,47 @@ const Navbar = (
       darkMode: boolean;
     }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const router = useRouter();
+
+  const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && searchQuery.trim()) {
+      router.push(`/search?q=${encodeURIComponent(searchQuery)}`);
+      setIsMenuOpen(false);
+    }
+  };
 
   return (
-    <nav className="sticky top-0 z-50 backdrop-blur-xl bg-white/10 dark:bg-black/30 border-b border-white/20 dark:border-white/10">
-      <div className="max-w-7xl mx-auto px-6 py-4">
+    <nav className="fixed top-0 w-full z-50 backdrop-blur-xl bg-white/10 dark:bg-black/30 border-b border-white/20 dark:border-white/10">
+      <div className="w-full px-6 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <div className="flex items-center space-x-2">
+          <Link href="/" className="flex items-center space-x-2">
             <div className="w-8 h-8 bg-gradient-to-br from-pink-500 to-purple-600 rounded-lg flex items-center justify-center">
               <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" />
               </svg>
             </div>
             <span className="text-xl font-bold text-black dark:text-white">Shizuru Music</span>
-          </div>
+          </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            <a href="#" className="text-black dark:text-white hover:text-black/30 dark:hover:text-white/40 transition-colors">Home</a>
-            <a href="#" className="text-black dark:text-white hover:text-black/30 dark:hover:text-white/40 transition-colors">Browse</a>
-            <a href="#" className="text-black dark:text-white hover:text-black/30 dark:hover:text-white/40 transition-colors">Library</a>
-            <a href="#" className="text-black dark:text-white hover:text-black/30 dark:hover:text-white/40 transition-colors">Playlists</a>
+          <div className="hidden lg:flex items-center space-x-8">
+            <Link href="/" className="text-black dark:text-white hover:text-black/30 dark:hover:text-white/40 transition-colors">Home</Link>
+            <Link href="/browse" className="text-black dark:text-white hover:text-black/30 dark:hover:text-white/40 transition-colors">Browse</Link>
+            <Link href="/library" className="text-black dark:text-white hover:text-black/30 dark:hover:text-white/40 transition-colors">Library</Link>
+            <Link href="/library/playlists" className="text-black dark:text-white hover:text-black/30 dark:hover:text-white/40 transition-colors">Playlists</Link>
           </div>
 
           {/* Search Bar */}
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="hidden lg:flex items-center space-x-4">
             <div className="relative">
               <input
                 type="text"
                 placeholder="Search songs, artists, albums..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={handleSearch}
                 className="w-64 px-4 py-2 bg-white/20 backdrop-blur-sm border border-neutral-300 dark:border-white/10 rounded-full text-black dark:text-white placeholder-black/30 dark:placeholder-white focus:outline-none focus:border-white/50 transition-all"
               />
               <svg className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-black dark:text-white" fill="currentColor" viewBox="0 0 24 24">
@@ -73,7 +87,7 @@ const Navbar = (
                   strokeWidth="2"
                 >
                   <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="2" fill="none" />
-                  <path stroke="currentColor" strokeWidth="2" stroke-linecap="round" d="M12 2v2M12 20v2M20 12h2M2 12h2M17.66 6.34l1.41-1.41M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M4.93 19.07l1.41-1.41" />
+                  <path stroke="currentColor" strokeWidth="2" strokeLinecap="round" d="M12 2v2M12 20v2M20 12h2M2 12h2M17.66 6.34l1.41-1.41M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M4.93 19.07l1.41-1.41" />
                 </svg>
 
               )}
@@ -82,7 +96,7 @@ const Navbar = (
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden p-2 text-black dark:text-white"
+            className="lg:hidden p-2 text-black dark:text-white"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -91,14 +105,13 @@ const Navbar = (
           </button>
         </div>
 
-        {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden mt-4 pb-4 border-t border-white/20 pt-4">
+          <div className="lg:hidden mt-4 pb-4 border-t border-white/20 pt-4">
             <div className="flex flex-col space-y-4">
-              <a href="#" className="text-black dark:text-white hover:text-white/80 transition-colors">Home</a>
-              <a href="#" className="text-black dark:text-white/70 hover:text-white transition-colors">Browse</a>
-              <a href="#" className="text-black dark:text-white/70 hover:text-white transition-colors">Library</a>
-              <a href="#" className="text-black dark:text-white/70 hover:text-white transition-colors">Playlists</a>
+              <Link href="/" className="text-black dark:text-white hover:text-white/80 transition-colors">Home</Link>
+              <Link href="/browse" className="text-black dark:text-white/70 hover:text-white transition-colors">Browse</Link>
+              <Link href="/library" className="text-black dark:text-white/70 hover:text-white transition-colors">Library</Link>
+              <Link href="/library/playlists" className="text-black dark:text-white/70 hover:text-white transition-colors">Playlists</Link>
 
               <button
                 onClick={toggleDark}
@@ -128,7 +141,7 @@ const Navbar = (
                       strokeWidth="2"
                     >
                       <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="2" fill="none" />
-                      <path stroke="currentColor" strokeWidth="2" stroke-linecap="round" d="M12 2v2M12 20v2M20 12h2M2 12h2M17.66 6.34l1.41-1.41M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M4.93 19.07l1.41-1.41" />
+                      <path stroke="currentColor" strokeWidth="2" strokeLinecap="round" d="M12 2v2M12 20v2M20 12h2M2 12h2M17.66 6.34l1.41-1.41M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M4.93 19.07l1.41-1.41" />
                     </svg>
                     <span>Dark Mode</span>
                   </>
@@ -139,6 +152,9 @@ const Navbar = (
                 <input
                   type="text"
                   placeholder="Search..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyDown={handleSearch}
                   className="w-full px-4 py-2 bg-neutral-100 dark:bg-white/10 text-black dark:text-white border border-neutral-300 dark:border-white/10 backdrop-blur-sm rounded-full placeholder-black/30 dark:placeholder-white focus:outline-none focus:border-white/50 transition-all"
                 />
               </div>

@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react';
-import { BaseTrack, BaseArtist, BaseAlbum, ApiResponse } from '../types';
-import TrackCard from '../components/TrackCard';
-import ArtistCard from '../components/ArtistCard';
-import AlbumCard from '../components/AlbumCard';
+import { useRouter } from 'next/router';
+import { BaseTrack, BaseArtist, BaseAlbum } from '@/types';
+import TrackCard from './TrackCard';
+import ArtistCard from './ArtistCard';
+import AlbumCard from './AlbumCard';
 
-import ChangingHeroSection from '../components/ChangingHeroSection';
-import SectionHeader from '../components/SectionHeader';
+import ChangingHeroSection from './ChangingHeroSection';
+import SectionHeader from './SectionHeader';
 
 const HomePage = () => {
+  const router = useRouter();
   const [featuredTracks, setFeaturedTracks] = useState<BaseTrack[]>([]);
   const [topArtists, setTopArtists] = useState<BaseArtist[]>([]);
   const [recentAlbums, setRecentAlbums] = useState<BaseAlbum[]>([]);
@@ -22,6 +24,10 @@ const HomePage = () => {
           fetch('/api/albums?page=1&limit=6')
         ]);
 
+        if (!tracksRes.ok || !artistsRes.ok || !albumsRes.ok) {
+          throw new Error('Failed to fetch data');
+        }
+
         const [tracksData, artistsData, albumsData]: [
           BaseTrack[],
           BaseArtist[],
@@ -35,15 +41,16 @@ const HomePage = () => {
         setFeaturedTracks(tracksData);
         setTopArtists(artistsData);
         setRecentAlbums(albumsData);
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching data:', error);
-      } finally {
-        setLoading(false);
+        router.push('/500');
+        // Don't set loading to false; keep spinner until redirect happens
       }
     };
 
     fetchData();
-  }, []);
+  }, [router]);
 
   if (loading) {
     return (
@@ -54,19 +61,19 @@ const HomePage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b text-black dark:text-white">
+    <div className="min-h-screen bg-white dark:bg-black text-black dark:text-white">
       {/* Hero Section */}
       <ChangingHeroSection tracks={featuredTracks} />
 
 
       {/* Main Content */}
-      <div className="px-6 pb-20 bg-white dark:bg-black">
+      <div className="px-6 pb-20 bg-white dark:bg-black max-w-7xl mx-auto">
         {/* Featured Tracks */}
         <section className="mb-12">
           <SectionHeader title="Featured Tracks" />
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="flex flex-col space-y-2">
             {featuredTracks.slice(1, 7).map((track, index) => (
-              <TrackCard key={track.track_id || index} track={track} />
+              <TrackCard key={track.track_id || index} track={track} layout="list" />
             ))}
           </div>
         </section>

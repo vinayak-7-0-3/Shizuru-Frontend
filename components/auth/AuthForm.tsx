@@ -2,10 +2,17 @@ import Input from './Input';
 import Button from './Button';
 import Link from 'next/link';
 
+export interface AuthFormState {
+  username?: string;
+  password?: string;
+  email?: string;
+  [key: string]: string | undefined;
+}
+
 interface Props {
   title: string;
-  form: any;
-  setForm: (v: any) => void;
+  form: AuthFormState;
+  setForm: (v: AuthFormState) => void;
   onSubmit: (e: React.FormEvent) => Promise<void>;
   buttonLabel: string;
   link?: { href: string; label: string; text: string };
@@ -32,13 +39,13 @@ export default function AuthForm({
       {error && <p className="text-red-500 text-center">{error}</p>}
       {success && <p className="text-green-400 text-center">{success}</p>}
 
-      <Input placeholder="Username" value={form.username} onChange={(e) => setForm({ ...form, username: e.target.value })} />
-      
+      <Input placeholder="Username" value={form.username || ''} onChange={(e) => setForm({ ...form, username: e.target.value })} />
+
       {showEmail && (
-        <Input placeholder="Email (optional)" type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
+        <Input placeholder="Email (optional)" type="email" value={form.email || ''} onChange={(e) => setForm({ ...form, email: e.target.value })} />
       )}
 
-      <Input placeholder="Password" type="password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} />
+      <Input placeholder="Password" type="password" value={form.password || ''} onChange={(e) => setForm({ ...form, password: e.target.value })} />
 
       <Button>{buttonLabel}</Button>
 

@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import Image from 'next/image';
 import { BaseTrack } from "@/types";
+import { useMusicPlayer } from "../contexts/MusicPlayerContext";
+import { Play } from "lucide-react";
 
 interface HeroSectionProps {
   featuredTrack?: BaseTrack;
@@ -12,15 +15,21 @@ interface ChangingHeroSectionProps {
 }
 
 const HeroSection = ({ featuredTrack }: HeroSectionProps) => {
+  const { playTrack } = useMusicPlayer();
+
   if (!featuredTrack) return null;
 
+  const handlePlay = () => {
+    playTrack(featuredTrack);
+  };
+
   return (
-    <div className="relative h-[28rem] sm:h-96 mb-6 sm:mb-8 overflow-hidden">
+    <div className="relative h-[32rem] sm:h-[28rem] mb-6 sm:mb-8 overflow-hidden pt-20">
       {/* Background Image */}
-      <div 
+      <div
         className="absolute inset-0 bg-cover bg-center filter blur-sm scale-105"
         style={{
-          backgroundImage: `url(${featuredTrack.cover_url || '/default-cover.jpg'})`
+          backgroundImage: `url(${featuredTrack.cover_url || '/cover_art.png'})`
         }}
       />
 
@@ -31,13 +40,16 @@ const HeroSection = ({ featuredTrack }: HeroSectionProps) => {
       <div className="relative h-full flex items-center justify-center px-4 sm:px-6">
         <div className="backdrop-blur-xl bg-white/10 rounded-2xl sm:rounded-3xl p-4 sm:p-8 max-w-4xl mx-auto border border-white/20 w-full">
           <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-8">
-            
+
             {/* Album Art */}
             <div className="flex-shrink-0">
-              <img
-                src={featuredTrack.cover_url || '/default-cover.jpg'}
+              <Image
+                src={featuredTrack.cover_url || '/cover_art.png'}
                 alt={featuredTrack.title}
+                width={192}
+                height={192}
                 className="w-24 h-24 sm:w-40 sm:h-40 md:w-48 md:h-48 rounded-xl sm:rounded-2xl shadow-2xl object-cover"
+                unoptimized
               />
             </div>
 
@@ -59,8 +71,12 @@ const HeroSection = ({ featuredTrack }: HeroSectionProps) => {
               )}
 
               {/* Play Button */}
-              <button className="w-full sm:w-auto bg-white/20 backdrop-blur-sm border border-white/30 text-white px-6 py-2 sm:px-8 sm:py-3 rounded-full font-semibold hover:bg-white/30 transition-all duration-300 hover:scale-105">
-                ▶ Play Now
+              <button
+                onClick={handlePlay}
+                className="w-full sm:w-auto bg-white/20 backdrop-blur-sm border border-white/30 text-white px-6 py-2 sm:px-8 sm:py-3 rounded-full font-semibold hover:bg-white/30 transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2"
+              >
+                <Play className="w-5 h-5 fill-current" />
+                Play Now
               </button>
             </div>
           </div>

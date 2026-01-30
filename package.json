@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ducanh2912/next-pwa": "^10.2.9",
     "autoprefixer": "^10.4.21",
     "framer-motion": "^12.23.6",
     "lucide-react": "^0.525.0",

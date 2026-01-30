@@ -1,6 +1,6 @@
 import { useAuth } from '../lib/auth';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+
 
 interface RoleProtectedRouteProps {
   children: React.ReactNode;
@@ -8,8 +8,8 @@ interface RoleProtectedRouteProps {
   fallback?: React.ReactNode;
 }
 
-export const RoleProtectedRoute: React.FC<RoleProtectedRouteProps> = ({ 
-  children, 
+export const RoleProtectedRoute: React.FC<RoleProtectedRouteProps> = ({
+  children,
   requiredRole = 'user',
   fallback = <div>Access denied</div>
 }) => {
@@ -18,7 +18,7 @@ export const RoleProtectedRoute: React.FC<RoleProtectedRouteProps> = ({
 
   // Basic auth is already handled by middleware
   // This component only handles role-based access
-  
+
   if (loading) {
     return <div>Loading...</div>;
   }

@@ -41,3 +41,10 @@ yarn-error.log*
 next-env.d.ts
 components/ApiTestPage.tsx
 pages/api-test.js
+backendapi.json
+.vscode
+
+# PWA
+public/sw.js
+public/workbox-*.js
+public/worker-*.js
