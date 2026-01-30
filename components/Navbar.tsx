@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 const Navbar = (
   {
@@ -11,6 +12,15 @@ const Navbar = (
       darkMode: boolean;
     }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const router = useRouter();
+
+  const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && searchQuery.trim()) {
+      router.push(`/search?q=${encodeURIComponent(searchQuery)}`);
+      setIsMenuOpen(false);
+    }
+  };
 
   return (
     <nav className="fixed top-0 w-full z-50 backdrop-blur-xl bg-white/10 dark:bg-black/30 border-b border-white/20 dark:border-white/10">
@@ -40,6 +50,9 @@ const Navbar = (
               <input
                 type="text"
                 placeholder="Search songs, artists, albums..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={handleSearch}
                 className="w-64 px-4 py-2 bg-white/20 backdrop-blur-sm border border-neutral-300 dark:border-white/10 rounded-full text-black dark:text-white placeholder-black/30 dark:placeholder-white focus:outline-none focus:border-white/50 transition-all"
               />
               <svg className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-black dark:text-white" fill="currentColor" viewBox="0 0 24 24">
@@ -92,7 +105,6 @@ const Navbar = (
           </button>
         </div>
 
-        {/* Mobile Menu */}
         {isMenuOpen && (
           <div className="lg:hidden mt-4 pb-4 border-t border-white/20 pt-4">
             <div className="flex flex-col space-y-4">
@@ -140,6 +152,9 @@ const Navbar = (
                 <input
                   type="text"
                   placeholder="Search..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyDown={handleSearch}
                   className="w-full px-4 py-2 bg-neutral-100 dark:bg-white/10 text-black dark:text-white border border-neutral-300 dark:border-white/10 backdrop-blur-sm rounded-full placeholder-black/30 dark:placeholder-white focus:outline-none focus:border-white/50 transition-all"
                 />
               </div>

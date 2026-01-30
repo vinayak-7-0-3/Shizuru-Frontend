@@ -64,3 +64,9 @@ export interface ArtistDetailed extends BaseArtist {
     albums: BaseAlbum[];
     tracks: BaseTrack[];
 }
+
+export interface SearchResponse {
+    tracks: BaseTrack[];
+    albums: BaseAlbum[];
+    artists: BaseArtist[];
+}
