@@ -13,7 +13,7 @@ const Navbar = (
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <nav className="sticky top-0 z-50 backdrop-blur-xl bg-white/10 dark:bg-black/30 border-b border-white/20 dark:border-white/10">
+    <nav className="fixed top-0 w-full z-50 backdrop-blur-xl bg-white/10 dark:bg-black/30 border-b border-white/20 dark:border-white/10">
       <div className="w-full px-6 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}

@@ -6,9 +6,10 @@ import { useMusicPlayer } from '../contexts/MusicPlayerContext';
 
 interface MainLayoutProps {
   children: ReactNode;
+  immersive?: boolean;
 }
 
-const MainLayout = ({ children }: MainLayoutProps) => {
+const MainLayout = ({ children, immersive = false }: MainLayoutProps) => {
   const { isFullScreen } = useMusicPlayer();
   const [darkMode, setDarkMode] = useState(false);
 
@@ -34,7 +35,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
   return (
     <>
       <Navbar toggleDark={() => setDarkMode(prev => !prev)} darkMode={darkMode} />
-      <main className="bg-white dark:bg-neutral-900 text-black dark:text-white transition-colors duration-300 pb-20">
+      <main className={`text-black dark:text-white transition-colors duration-300 pb-20 ${immersive ? '' : 'pt-[74px]'}`}>
         {children}
       </main>
       <MiniPlayer />

@@ -71,8 +71,8 @@ const BrowsePage = () => {
     }, []);
 
     return (
-        <MainLayout>
-            <div className="min-h-screen bg-white dark:bg-neutral-900 text-black dark:text-white pt-8 px-6 pb-20">
+        <MainLayout immersive>
+            <div className="min-h-screen bg-white dark:bg-neutral-900 text-black dark:text-white pt-24 px-6 pb-20">
                 <div className="max-w-7xl mx-auto space-y-12">
 
                     {/* Header */}

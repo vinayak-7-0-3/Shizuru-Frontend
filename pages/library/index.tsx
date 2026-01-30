@@ -32,8 +32,8 @@ const LibraryPage = () => {
     ];
 
     return (
-        <MainLayout>
-            <div className="min-h-screen pt-8 px-6 bg-white dark:bg-neutral-900 text-black dark:text-white">
+        <MainLayout immersive>
+            <div className="min-h-screen pt-24 px-6 bg-white dark:bg-neutral-900 text-black dark:text-white">
                 <div className="w-full">
                     <SectionHeader title="Your Library" />
 

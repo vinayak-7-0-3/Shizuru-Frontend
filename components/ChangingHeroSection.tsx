@@ -15,9 +15,9 @@ const HeroSection = ({ featuredTrack }: HeroSectionProps) => {
   if (!featuredTrack) return null;
 
   return (
-    <div className="relative h-[28rem] sm:h-96 mb-6 sm:mb-8 overflow-hidden">
+    <div className="relative h-[32rem] sm:h-[28rem] mb-6 sm:mb-8 overflow-hidden pt-20">
       {/* Background Image */}
-      <div 
+      <div
         className="absolute inset-0 bg-cover bg-center filter blur-sm scale-105"
         style={{
           backgroundImage: `url(${featuredTrack.cover_url || '/default-cover.jpg'})`
@@ -31,7 +31,7 @@ const HeroSection = ({ featuredTrack }: HeroSectionProps) => {
       <div className="relative h-full flex items-center justify-center px-4 sm:px-6">
         <div className="backdrop-blur-xl bg-white/10 rounded-2xl sm:rounded-3xl p-4 sm:p-8 max-w-4xl mx-auto border border-white/20 w-full">
           <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-8">
-            
+
             {/* Album Art */}
             <div className="flex-shrink-0">
               <img

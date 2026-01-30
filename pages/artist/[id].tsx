@@ -61,10 +61,10 @@ const ArtistDetailPage = () => {
     }
 
     return (
-        <MainLayout>
+        <MainLayout immersive>
             <div className="min-h-screen bg-white dark:bg-neutral-900 text-black dark:text-white pb-24">
                 {/* Hero Section */}
-                <div className="relative h-96 w-full overflow-hidden">
+                <div className="relative h-[28rem] w-full overflow-hidden">
                     <div
                         className="absolute inset-0 bg-cover bg-center"
                         style={{ backgroundImage: `url(${artist.cover_url || '/default-artist.jpg'})` }}

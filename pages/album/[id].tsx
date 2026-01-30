@@ -60,10 +60,10 @@ const AlbumDetailPage = () => {
     }
 
     return (
-        <MainLayout>
+        <MainLayout immersive>
             <div className="min-h-screen bg-white dark:bg-neutral-900 text-black dark:text-white pb-24">
                 {/* Hero Section */}
-                <div className="relative h-80 w-full overflow-hidden">
+                <div className="relative h-96 w-full overflow-hidden">
                     <div
                         className="absolute inset-0 bg-cover bg-center blur-2xl opacity-50 dark:opacity-30"
                         style={{ backgroundImage: `url(${album.cover_url || '/default-album.jpg'})` }}
@@ -119,7 +119,7 @@ const AlbumDetailPage = () => {
                         {album.tracks && album.tracks.length > 0 ? (
                             <div className="space-y-2">
                                 {album.tracks.map((track, index) => (
-                                    <TrackCard key={track.track_id || index} track={track} />
+                                    <TrackCard key={track.track_id || index} track={track} layout="list" />
                                 ))}
                             </div>
                         ) : (
