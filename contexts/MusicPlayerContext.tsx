@@ -1,22 +1,27 @@
-import React, { createContext, useContext, useState, useRef, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useRef, useEffect, ReactNode, useCallback } from 'react';
 import { BaseTrack } from '../types';
 
 interface MusicPlayerContextType {
   currentTrack: BaseTrack | null;
+  queue: BaseTrack[];
+  history: BaseTrack[];
   isPlaying: boolean;
   currentTime: number;
   duration: number;
   volume: number;
   isFullScreen: boolean;
-  playTrack: (track: BaseTrack) => void;
+  playTrack: (track: BaseTrack, albumTracks?: BaseTrack[]) => void;
   pauseTrack: () => void;
   resumeTrack: () => void;
   togglePlay: () => void;
   seekTo: (time: number) => void;
   setVolume: (volume: number) => void;
   toggleFullScreen: () => void;
-  nextTrack: () => void; // TODO
-  previousTrack: () => void; // TODO
+  nextTrack: () => void;
+  previousTrack: () => void;
+  addToQueue: (track: BaseTrack) => void;
+  clearQueue: () => void;
+  removeFromQueue: (index: number) => void;
 }
 
 const MusicPlayerContext = createContext<MusicPlayerContextType | undefined>(undefined);
@@ -35,12 +40,33 @@ interface MusicPlayerProviderProps {
 
 export const MusicPlayerProvider = ({ children }: MusicPlayerProviderProps) => {
   const [currentTrack, setCurrentTrack] = useState<BaseTrack | null>(null);
+  const [queue, setQueue] = useState<BaseTrack[]>([]);
+  const [history, setHistory] = useState<BaseTrack[]>([]);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [volume, setVolumeState] = useState(1);
   const [isFullScreen, setIsFullScreen] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  // Play the next track in queue
+  const playNextInQueue = useCallback(() => {
+    if (queue.length > 0) {
+      const [nextTrack, ...remainingQueue] = queue;
+      if (currentTrack) {
+        setHistory(prev => [...prev, currentTrack]);
+      }
+      setCurrentTrack(nextTrack);
+      setQueue(remainingQueue);
+      if (audioRef.current) {
+        audioRef.current.src = `/api/stream/${nextTrack.file_unique_id}`;
+        audioRef.current.play();
+        setIsPlaying(true);
+      }
+    } else {
+      setIsPlaying(false);
+    }
+  }, [queue, currentTrack]);
 
   useEffect(() => {
     if (!audioRef.current) {
@@ -52,7 +78,10 @@ export const MusicPlayerProvider = ({ children }: MusicPlayerProviderProps) => {
 
     const handleTimeUpdate = () => setCurrentTime(audio.currentTime);
     const handleDurationChange = () => setDuration(audio.duration);
-    const handleEnded = () => setIsPlaying(false);
+    const handleEnded = () => {
+      // Auto-play next track in queue when current track ends
+      playNextInQueue();
+    };
 
     audio.addEventListener('timeupdate', handleTimeUpdate);
     audio.addEventListener('durationchange', handleDurationChange);
@@ -63,12 +92,35 @@ export const MusicPlayerProvider = ({ children }: MusicPlayerProviderProps) => {
       audio.removeEventListener('durationchange', handleDurationChange);
       audio.removeEventListener('ended', handleEnded);
     };
-  }, []);
+  }, [playNextInQueue]);
 
-  const playTrack = (track: BaseTrack) => {
+  const playTrack = (track: BaseTrack, albumTracks?: BaseTrack[]) => {
     if (!audioRef.current) return;
 
-    if (currentTrack?.track_id !== track.track_id) {
+    // Add current track to history if it exists
+    if (currentTrack) {
+      setHistory(prev => [...prev, currentTrack]);
+    }
+
+    // If albumTracks is provided, set up the queue with remaining tracks
+    if (albumTracks && albumTracks.length > 0) {
+      const trackIndex = albumTracks.findIndex(
+        t => (t.track_id && t.track_id === track.track_id) ||
+          (t.file_unique_id && t.file_unique_id === track.file_unique_id)
+      );
+      if (trackIndex !== -1 && trackIndex < albumTracks.length - 1) {
+        // Set remaining tracks after the current one as the queue
+        setQueue(albumTracks.slice(trackIndex + 1));
+      } else {
+        // Track not found in album or is the last track, clear queue
+        setQueue([]);
+      }
+    }
+
+    const isSameTrack = currentTrack?.track_id === track.track_id ||
+      currentTrack?.file_unique_id === track.file_unique_id;
+
+    if (!isSameTrack) {
       setCurrentTrack(track);
       audioRef.current.src = `/api/stream/${track.file_unique_id}`;
     }
@@ -118,19 +170,60 @@ export const MusicPlayerProvider = ({ children }: MusicPlayerProviderProps) => {
   };
 
   const nextTrack = () => {
-    // TODO: Implement next track logic
-    console.log('Next track - TODO');
+    if (queue.length > 0) {
+      playNextInQueue();
+    }
   };
 
   const previousTrack = () => {
-    // TODO: Implement previous track logic
-    console.log('Previous track - TODO');
+    // If current time > 3 seconds, restart the current track
+    if (currentTime > 3) {
+      seekTo(0);
+      return;
+    }
+
+    // Otherwise, go back to the previous track in history
+    if (history.length > 0) {
+      const prevTrack = history[history.length - 1];
+      const newHistory = history.slice(0, -1);
+
+      // Add current track to the front of the queue
+      if (currentTrack) {
+        setQueue(prev => [currentTrack, ...prev]);
+      }
+
+      setHistory(newHistory);
+      setCurrentTrack(prevTrack);
+
+      if (audioRef.current) {
+        audioRef.current.src = `/api/stream/${prevTrack.file_unique_id}`;
+        audioRef.current.play();
+        setIsPlaying(true);
+      }
+    } else {
+      // No history, just restart current track
+      seekTo(0);
+    }
+  };
+
+  const addToQueue = (track: BaseTrack) => {
+    setQueue(prev => [...prev, track]);
+  };
+
+  const clearQueue = () => {
+    setQueue([]);
+  };
+
+  const removeFromQueue = (index: number) => {
+    setQueue(prev => prev.filter((_, i) => i !== index));
   };
 
   return (
     <MusicPlayerContext.Provider
       value={{
         currentTrack,
+        queue,
+        history,
         isPlaying,
         currentTime,
         duration,
@@ -145,6 +238,9 @@ export const MusicPlayerProvider = ({ children }: MusicPlayerProviderProps) => {
         toggleFullScreen,
         nextTrack,
         previousTrack,
+        addToQueue,
+        clearQueue,
+        removeFromQueue,
       }}
     >
       {children}

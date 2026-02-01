@@ -5,6 +5,7 @@ import Image from 'next/image';
 const MiniPlayer = () => {
   const {
     currentTrack,
+    queue,
     isPlaying,
     currentTime,
     duration,
@@ -15,9 +16,11 @@ const MiniPlayer = () => {
     toggleFullScreen,
     nextTrack,
     previousTrack,
+    clearQueue,
   } = useMusicPlayer();
 
   const [showVolumeSlider, setShowVolumeSlider] = useState(false);
+  const [showQueueTooltip, setShowQueueTooltip] = useState(false);
 
   if (!currentTrack) return null;
 
@@ -150,6 +153,31 @@ const MiniPlayer = () => {
             </div>
           )}
         </div>
+
+        {/* Queue Indicator */}
+        {queue.length > 0 && (
+          <div className="relative">
+            <button
+              onClick={clearQueue}
+              onMouseEnter={() => setShowQueueTooltip(true)}
+              onMouseLeave={() => setShowQueueTooltip(false)}
+              className="p-2 rounded-full hover:bg-black/10 dark:hover:bg-white/10 transition-colors text-black dark:text-white relative"
+              aria-label="Clear queue"
+            >
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M15 6H3v2h12V6zm0 4H3v2h12v-2zM3 16h8v-2H3v2zM17 6v8.18c-.31-.11-.65-.18-1-.18-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3V8h3V6h-5z" />
+              </svg>
+              <span className="absolute -top-1 -right-1 bg-black dark:bg-white text-white dark:text-black text-xs w-4 h-4 rounded-full flex items-center justify-center font-medium">
+                {queue.length}
+              </span>
+            </button>
+            {showQueueTooltip && (
+              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-black dark:bg-white text-white dark:text-black text-xs rounded whitespace-nowrap">
+                {queue.length} in queue (Click to clear)
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Expand Button */}
         <button

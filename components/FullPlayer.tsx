@@ -1,11 +1,12 @@
 import { useMusicPlayer } from '../contexts/MusicPlayerContext';
 import { useEffect, useState, useCallback } from 'react';
-import { SkipBack, SkipForward, Play, Pause, Volume2, VolumeX } from "lucide-react";
+import { SkipBack, SkipForward, Play, Pause, Volume2, VolumeX, ListMusic, X, Trash2 } from "lucide-react";
 import Image from 'next/image';
 
 const FullPlayer = () => {
   const {
     currentTrack,
+    queue,
     isPlaying,
     currentTime,
     duration,
@@ -16,10 +17,13 @@ const FullPlayer = () => {
     toggleFullScreen,
     nextTrack,
     previousTrack,
+    clearQueue,
+    removeFromQueue,
   } = useMusicPlayer();
 
   const [showVolumeSlider, setShowVolumeSlider] = useState(false);
   const [showControls, setShowControls] = useState(true);
+  const [showQueue, setShowQueue] = useState(false);
   const [mouseTimer, setMouseTimer] = useState<NodeJS.Timeout | null>(null);
 
   // Handle mouse movement for auto-hide controls
@@ -30,20 +34,26 @@ const FullPlayer = () => {
       clearTimeout(mouseTimer);
     }
 
+    // Don't auto-hide if queue panel is open
+    if (showQueue) return;
+
     const timer = setTimeout(() => {
       setShowControls(false);
     }, 3000); // Hide after 3 seconds of no movement
 
     setMouseTimer(timer);
-  }, [mouseTimer]);
+  }, [mouseTimer, showQueue]);
 
   // Handle mouse leave to hide controls immediately
   const handleMouseLeave = useCallback(() => {
+    // Don't auto-hide if queue panel is open
+    if (showQueue) return;
+
     if (mouseTimer) {
       clearTimeout(mouseTimer);
     }
     setShowControls(false);
-  }, [mouseTimer]);
+  }, [mouseTimer, showQueue]);
 
   // Prevent body scroll when full screen player is open
   useEffect(() => {
@@ -239,8 +249,96 @@ const FullPlayer = () => {
                 </div>
               </div>
             </div>
+
+            {/* Queue Button - absolutely positioned left side */}
+            <div className="absolute left-6 md:left-12 flex items-center">
+              <button
+                onClick={() => setShowQueue(!showQueue)}
+                className="p-2 rounded-full hover:bg-white/10 transition-all duration-200 backdrop-blur-sm hover:scale-110 relative"
+                aria-label="Toggle queue"
+              >
+                <ListMusic className="w-4 h-4 text-white/70" />
+                {queue.length > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-white text-black text-xs w-4 h-4 rounded-full flex items-center justify-center font-medium">
+                    {queue.length}
+                  </span>
+                )}
+              </button>
+            </div>
           </div>
 
+        </div>
+      </div>
+
+      {/* Queue Panel */}
+      <div
+        className={`fixed top-0 right-0 bottom-0 w-full sm:w-80 bg-black/95 sm:bg-black/90 backdrop-blur-xl border-l border-white/10 z-[60] transform transition-transform duration-300 ${showQueue ? 'translate-x-0' : 'translate-x-full'}`}
+        onMouseMove={(e) => e.stopPropagation()}
+        onMouseLeave={(e) => e.stopPropagation()}
+      >
+        <div className="flex flex-col h-full">
+          {/* Queue Header */}
+          <div className="flex items-center justify-between p-4 border-b border-white/10 safe-area-top">
+            <h3 className="text-lg font-semibold text-white">Up Next</h3>
+            <div className="flex items-center gap-2">
+              {queue.length > 0 && (
+                <button
+                  onClick={clearQueue}
+                  className="p-2 rounded-full hover:bg-white/10 transition-colors text-white/70 hover:text-white"
+                  aria-label="Clear queue"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              )}
+              <button
+                onClick={() => setShowQueue(false)}
+                className="p-2 rounded-full hover:bg-white/10 transition-colors text-white/70 hover:text-white"
+                aria-label="Close queue"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+
+          {/* Queue List */}
+          <div className="flex-1 overflow-y-auto p-4 pb-safe">
+            {queue.length === 0 ? (
+              <div className="text-center text-white/50 py-8">
+                <ListMusic className="w-12 h-12 mx-auto mb-3 opacity-50" />
+                <p>Queue is empty</p>
+                <p className="text-sm mt-1">Play from an album to add songs</p>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                {queue.map((track, index) => (
+                  <div
+                    key={`${track.file_unique_id || track.track_id}-${index}`}
+                    className="flex items-center gap-3 p-2 rounded-lg hover:bg-white/10 active:bg-white/15 transition-colors group"
+                  >
+                    <Image
+                      src={track.cover_url || '/cover_art.png'}
+                      alt={track.title}
+                      width={48}
+                      height={48}
+                      className="rounded object-cover flex-shrink-0"
+                      unoptimized
+                    />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-white text-sm truncate">{track.title}</p>
+                      <p className="text-white/60 text-xs truncate">{track.artist}</p>
+                    </div>
+                    <button
+                      onClick={() => removeFromQueue(index)}
+                      className="p-2 rounded-full hover:bg-white/20 transition-colors text-white/50 hover:text-white sm:opacity-0 sm:group-hover:opacity-100"
+                      aria-label="Remove from queue"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
@@ -317,6 +415,9 @@ const FullPlayer = () => {
           padding-top: max(1rem, env(safe-area-inset-top));
         }
         .safe-area-bottom {
+          padding-bottom: max(1rem, env(safe-area-inset-bottom));
+        }
+        .pb-safe {
           padding-bottom: max(1rem, env(safe-area-inset-bottom));
         }
 

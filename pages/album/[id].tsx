@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { Clock, Calendar, Disc } from 'lucide-react';
+import { Clock, Calendar, Disc, Play, Shuffle } from 'lucide-react';
 import MainLayout from '../../components/MainLayout';
 import TrackCard from '../../components/TrackCard';
+import { useMusicPlayer } from '../../contexts/MusicPlayerContext';
 
 import { AlbumDetailed, BaseTrack } from '@/types';
 
@@ -12,6 +13,23 @@ const AlbumDetailPage = () => {
     const { id } = router.query;
     const [album, setAlbum] = useState<AlbumDetailed | null>(null);
     const [loading, setLoading] = useState(true);
+    const { playTrack } = useMusicPlayer();
+
+    const handlePlayAll = (shuffle = false) => {
+        if (!album?.tracks || album.tracks.length === 0) return;
+
+        let tracks = [...album.tracks];
+        if (shuffle) {
+            // Fisher-Yates shuffle
+            for (let i = tracks.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [tracks[i], tracks[j]] = [tracks[j], tracks[i]];
+            }
+        }
+
+        // Play the first track with the rest as queue
+        playTrack(tracks[0], tracks);
+    };
 
     useEffect(() => {
         if (!id) return;
@@ -103,6 +121,23 @@ const AlbumDetailPage = () => {
                                         <span>{album.track_count} songs</span>
                                     </div>
                                 </div>
+                                {/* Play All & Shuffle Buttons */}
+                                <div className="flex items-center justify-center md:justify-start gap-3 mt-4">
+                                    <button
+                                        onClick={() => handlePlayAll(false)}
+                                        className="flex items-center gap-2 px-6 py-3 bg-black dark:bg-white text-white dark:text-black rounded-full font-semibold hover:scale-105 transition-transform shadow-lg"
+                                    >
+                                        <Play size={20} fill="currentColor" />
+                                        Play All
+                                    </button>
+                                    <button
+                                        onClick={() => handlePlayAll(true)}
+                                        className="flex items-center gap-2 px-5 py-3 bg-black/10 dark:bg-white/10 text-black dark:text-white rounded-full font-semibold hover:bg-black/20 dark:hover:bg-white/20 transition-colors"
+                                    >
+                                        <Shuffle size={18} />
+                                        Shuffle
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -123,7 +158,7 @@ const AlbumDetailPage = () => {
                         {album.tracks && album.tracks.length > 0 ? (
                             <div className="space-y-2">
                                 {album.tracks.map((track: BaseTrack, index) => (
-                                    <TrackCard key={track.track_id || index} track={track} layout="list" />
+                                    <TrackCard key={track.track_id || index} track={track} layout="list" albumTracks={album.tracks} />
                                 ))}
                             </div>
                         ) : (

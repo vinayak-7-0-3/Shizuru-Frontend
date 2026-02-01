@@ -1,15 +1,16 @@
 import { BaseTrack } from '@/types';
 import { useMusicPlayer } from '../contexts/MusicPlayerContext';
-import { Download } from 'lucide-react';
+import { Download, ListPlus } from 'lucide-react';
 import Image from 'next/image';
 
 interface TrackCardProps {
   track: BaseTrack;
   layout?: 'card' | 'list';
+  albumTracks?: BaseTrack[];
 }
 
-const TrackCard = ({ track, layout = 'card' }: TrackCardProps) => {
-  const { playTrack } = useMusicPlayer();
+const TrackCard = ({ track, layout = 'card', albumTracks }: TrackCardProps) => {
+  const { playTrack, addToQueue } = useMusicPlayer();
 
   const formatDuration = (seconds?: number) => {
     if (!seconds) return '';
@@ -19,7 +20,12 @@ const TrackCard = ({ track, layout = 'card' }: TrackCardProps) => {
   };
 
   const handlePlay = () => {
-    playTrack(track);
+    playTrack(track, albumTracks);
+  };
+
+  const handleAddToQueue = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    addToQueue(track);
   };
 
   return (
@@ -60,6 +66,14 @@ const TrackCard = ({ track, layout = 'card' }: TrackCardProps) => {
           <div className="hidden md:block w-1/4 text-sm text-gray-500 dark:text-gray-400 truncate">
             {track.album || ''}
           </div>
+
+          <button
+            onClick={handleAddToQueue}
+            className="p-2 text-gray-500 hover:text-black dark:text-gray-400 dark:hover:text-white transition-colors"
+            title="Add to Queue"
+          >
+            <ListPlus size={16} />
+          </button>
 
           <a
             href={`/api/stream/${track.file_unique_id}?download=true&filename=${encodeURIComponent(track.file_name || (track.title || 'track') + '.mp3')}`}
@@ -117,6 +131,13 @@ const TrackCard = ({ track, layout = 'card' }: TrackCardProps) => {
               )}
               {track.duration && (
                 <div className="flex items-center gap-3">
+                  <button
+                    onClick={handleAddToQueue}
+                    className="text-black/60 hover:text-black dark:text-white/60 dark:hover:text-white transition-colors"
+                    title="Add to Queue"
+                  >
+                    <ListPlus size={14} />
+                  </button>
                   <a
                     href={`/api/stream/${track.file_unique_id}?download=true&filename=${encodeURIComponent(track.file_name || (track.title || 'track') + '.mp3')}`}
                     onClick={(e) => e.stopPropagation()}
