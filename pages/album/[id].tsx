@@ -18,7 +18,7 @@ const AlbumDetailPage = () => {
     const handlePlayAll = (shuffle = false) => {
         if (!album?.tracks || album.tracks.length === 0) return;
 
-        let tracks = [...album.tracks];
+        const tracks = [...album.tracks];
         if (shuffle) {
             // Fisher-Yates shuffle
             for (let i = tracks.length - 1; i > 0; i--) {
