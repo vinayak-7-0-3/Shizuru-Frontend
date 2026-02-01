@@ -20,6 +20,7 @@ COPY . .
 
 # Next.js collects completely anonymous telemetry data about general usage.
 ENV NEXT_TELEMETRY_DISABLED=1
+ENV NODE_ENV=production
 
 RUN \
   if [ -f yarn.lock ]; then yarn run build; \
