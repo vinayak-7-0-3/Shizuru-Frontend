@@ -12,7 +12,9 @@ export function middleware(request: NextRequest) {
   const isAuthRoute = authRoutes.some(route => pathname.startsWith(route));
 
   // Allow public routes and static files (handled by matcher partially, but good safety net)
-  if (isPublicRoute || pathname.startsWith('/_next') || pathname.startsWith('/static')) {
+  // Also allow PWA files (sw.js, manifest.json, workbox files)
+  const isPWAFile = pathname === '/sw.js' || pathname === '/manifest.json' || pathname.startsWith('/workbox-');
+  if (isPublicRoute || pathname.startsWith('/_next') || pathname.startsWith('/static') || isPWAFile) {
     return NextResponse.next();
   }
 
@@ -33,6 +35,7 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/((?!api|_next|static|favicon.ico).*)', // Match everything except api routes, Next.js internals and static files
+    // Match everything except api routes, Next.js internals, static files, and PWA files
+    '/((?!api|_next|static|favicon.ico|sw.js|manifest.json|workbox-|icons/).*)',
   ]
 };
